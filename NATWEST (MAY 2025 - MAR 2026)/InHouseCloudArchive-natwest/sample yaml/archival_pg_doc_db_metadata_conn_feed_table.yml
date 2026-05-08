@@ -1,0 +1,21 @@
+env: dev
+dag_id: dummy_archival_pg_doc_db_metadata_conn_feed_table
+schedule: "0 3 * * *"
+connections:
+  pg_doc_db_metadata_conn: pg_doc_db_metadata_conn
+warehouses:
+  dev_warehouse: 's3://natwest-data-archive-vault'
+retention_policies:
+  default_6m: 6m
+sources:
+  - name: pg_doc_db_metadata
+    connection: pg_doc_db_metadata_conn
+    include:
+      schemas:
+        - name: doc_sup_owner
+          tables:
+            - name: feed
+    exclude: {}
+    warehouse: dev_warehouse
+    retention_policy: default_6m
+    legal_hold: false
